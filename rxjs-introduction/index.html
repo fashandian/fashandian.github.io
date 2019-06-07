@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>rxjs秘籍系列 -- 快速入门篇 - WELCOME TO HERE!</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/favicon.ico"></head><body><input id="navi" type="checkbox"><ul class="main-navication"><li><a href="/"><span>Home</span></a></li><li><a href="https://github.com"><span>Github</span></a></li></ul><div class="wrapper" id="wrap"><div class="post-header"><label class="navi-button light" for="navi">MENU</label><img class="background" src="http://callfiles.ueibo.com/hexo-theme-laughing/post_background.jpg"><div class="post-title"><h1 class="title">rxjs秘籍系列 -- 快速入门篇</h1><ul class="meta"><li><i class="icon icon-author"></i>菜鸡蟹</li><li><i class="icon icon-clock"></i><!-- #{parseInt(page.content ? page.content.length/900 : 0)} Minutes-->2 Days</li><li><i class="icon icon-calendar"></i>June 4, 2019</li></ul></div></div><div class="article-content" style="max-width:800px"><h1 id="什么是RxJS"><a href="#什么是RxJS" class="headerlink" title="什么是RxJS"></a>什么是RxJS</h1><p>首先，我们需要先了解一下Rx，Rx是Reactive Extension（即ReactiveX）的简称，它是一套针对数据流的响应式编程工具，由微软开发的LinQ扩展而来。它可以将所有数据，不管是同步的还是异步的，抽象成数据流的形式，使开发者能以同步编程的方式来进行处理。</p>
+<p>RxJS则是Reactive Extension的JavaScript版本实现。相对应的，RxJava是Java版本的实现，RxPY是Python版本的实现。</p>
+<h1 id="为什么使用RxJS"><a href="#为什么使用RxJS" class="headerlink" title="为什么使用RxJS"></a>为什么使用RxJS</h1><p>在上层，从宏观来看，RxJS可以完美解决异步场景下的常见问题</p>
+<ul>
+<li>回调地狱，不用再层层嵌套回调</li>
+<li>竟态条件，可以保证异步操作的时序可控，达到流程控制的作用</li>
+<li>管理复杂状态，当某个异步操作带来了状态变化，通过订阅发布的方式去分发状态，达到同步管理状态的作用</li>
+<li>错误处理，提供了数据流动过程中的异常捕获机制以及重试机制</li>
+</ul>
+<p>其次，在应对复杂业务场景时（如一个系统的业务模块互相联系，需要进行信息通信以及共享的时候），RxJS提供的分发以及流程控制的机制，可以极大的简化我们的逻辑处理以及代码编写</p>
+<h1 id="理解RxJS"><a href="#理解RxJS" class="headerlink" title="理解RxJS"></a>理解RxJS</h1><p>通常，要理解RxJS，始终绕不开这四个重要的思想</p>
+<ul>
+<li>观察者模式，分发状态</li>
+<li>迭代器模式，进行流程控制</li>
+<li>函数式编程，惰性求值以及不修改状态</li>
+<li>响应式数据流，通过数据流的流动关系来展现数据间的关系</li>
+</ul>
+<p>响应式数据流是RxJS中最核心也是业务上最难把控的部分，它由两部分组成</p>
+<ul>
+<li>响应式（Reactive）理念</li>
+<li>基于数据流（Data-Stream-Based）</li>
+</ul>
+<h3 id="响应式（Reactive）理念"><a href="#响应式（Reactive）理念" class="headerlink" title="响应式（Reactive）理念"></a>响应式（Reactive）理念</h3><p>什么是Reactive呢，举个例子，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = b + c</span><br></pre></td></tr></table></figure></p>
+<p>在传统方式下，这是一种一次性的赋值过程，代码执行到这里只会调用一次，即使后面b和c再改变，a也不会变了。</p>
+<p>而在Reactive的理念中，我们定义的不是行为，而是关系，它是可重复的，当b或c发生变化时，整个表达式都会重新计算。</p>
+<h3 id="基于数据流（Data-Stream-Based）"><a href="#基于数据流（Data-Stream-Based）" class="headerlink" title="基于数据流（Data-Stream-Based）"></a>基于数据流（Data-Stream-Based）</h3><p>什么是数据流呢？</p>
+<blockquote>
+<p>数据流（data stream）是一组有序，有起点和终点的字节的数据序列</p>
+</blockquote>
+<p>在RxJS中，一切输入都被当做数据流来处理，生成的数据流是一种可观察的序列，可以被订阅，也可以被转换。</p>
+<p>整个过程可以类比成，将数据化作管道中的水流，从源头往下游流动，在到达下游出口前可以对流进行任意的转换。</p>
+<p>水流何时流动（分发），由源头控制，下游只需关心水流到达出口后的处理（只关心业务），这是一种编程思维上的根本改变。</p>
+<h1 id="RxJS快速入门"><a href="#RxJS快速入门" class="headerlink" title="RxJS快速入门"></a>RxJS快速入门</h1><p>RxJS有两个核心（Observable，Observer），三个重点（Operators、Subject、Schedulers）。</p>
+<ul>
+<li>Observable，可观察序列，也称为被观察者，数据流的源头</li>
+<li>Observer，观察者，可以订阅观察序列，数据流的出口</li>
+<li>Subject，既是观察者也是观察序列，有冷观察序列以及热观察序列之分，通常作为中间人的身份来分发数据</li>
+<li><p>Operators，管道操作符，主要是工具函数，用于数据流在流动过程中的加工处理。操作符种类较多，有转化类、过滤类、缓存类、合并类、多播类、错误处理类、辅助工具类等等</p>
+</li>
+<li><p>Schedulers，调度器，有一个虚拟时钟，用于控制数据流中数据的分发节奏</p>
+</li>
+</ul>
+</div><div class="article-meta" style="max-width:800px"><div class="tags"><i class="icon icon-tag"></i><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/rxjs/">rxjs</a><span class="tag-list-count">2</span></li></ul></div><div class="categories"><i class="icon icon-category"></i><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/js/">js</a><span class="category-list-count">1</span></li></ul></div></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/rxjs-async-search/"><i class="icon icon-arror-right"></i></a></li></ul><div class="page-footer"><div class="top"><ul class="social"><li><a href="https://github.com" title="Github" target="_blank"><i class="icon icon-github"></i></a></li><li><a href="https://weibo.com" title="Weibo" target="_blank"><i class="icon icon-weibo"></i></a></li><li><a href="https://www.segmentfault.com" title="SegmentFault" target="_blank"><i class="icon icon-segmentfault"></i></a></li></ul></div><div class="bottom"><p class="copyright">© 2019 WELCOME TO HERE!<br><small>POWER BY <a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY <a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></div><script>var wrap = document.getElementById('wrap');
+window.onload = function () {
+  wrap.className += ' done';
+}</script></body></html>
